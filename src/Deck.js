@@ -11,6 +11,11 @@ const SWIPE_THRESHOLD = 0.25 * SCREEN_WIDTH;
 const SWIPE_OUT_DURATION = 250;
 
 class Deck extends Component {
+  static defaultProps = {
+    onSwipeRight: () => {},
+    onSwipeLeft: () => {},
+  }
+
   constructor(props) {
     super(props);
 
@@ -32,7 +37,7 @@ class Deck extends Component {
       },
     });
 
-    this.state = { panResponder, position };
+    this.state = { panResponder, position, index: 0 };
   }
 
   forceSwipe(direction) {
@@ -44,9 +49,10 @@ class Deck extends Component {
   }
 
   onSwipeComplete(direction) {
-    const { onSwipeLeft, onSwipeRight } = this.props;
+    const { onSwipeLeft, onSwipeRight, data } = this.props;
+    const item = data[this.state.index];
 
-    direction === 'right' ? onSwipeRight() : onSwipeLeft();
+    direction === 'right' ? onSwipeRight(item) : onSwipeLeft(item);
   }
 
   resetPosition() {
